@@ -164,18 +164,7 @@ const EarlyAccessSuccess = () => {
         </div>
       )}
 
-      {/* Campus Insider CTA */}
-      <div style={{ background: '#FFF6F2', borderRadius: 16, padding: '20px', marginBottom: 16, textAlign: 'center' }}>
-        <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>🚀 Want to help launch Zordr?<br /><strong>Become a Campus Insider.</strong></p>
-        <p style={{ fontSize: 13, color: '#6B7280', marginBottom: 16 }}>Only 10–15 spots available.</p>
-        <button
-          onClick={() => navigate(`/${slug}/campus-insider`)}
-          style={{ width: '100%', background: primary, color: '#fff', border: 'none', borderRadius: 12, padding: '14px', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
-        >
-          Become a Campus Insider →
-        </button>
-        <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 10 }}>Lead the launch at {college?.short_name || college?.name} and earn exclusive perks.</p>
-      </div>
+
     </EarlyAccessLayout>
   );
 };

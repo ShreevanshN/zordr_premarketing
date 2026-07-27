@@ -523,22 +523,6 @@ const RewardCards = () => {
             🔗 Share with Friends
           </button>
 
-          <button
-            onClick={() => navigate(`/${slug}/campus-insider`)}
-            style={{
-              width: '100%',
-              background: '#fff',
-              color: '#111827',
-              border: '1px solid #EAEAEA',
-              borderRadius: 14,
-              padding: '14px',
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
-            Join The Insider Community
-          </button>
         </>
       )}
     </EarlyAccessLayout>

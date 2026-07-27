@@ -9,7 +9,6 @@ const ProgressSteps = () => {
     { label: 'Signup', path: `/${collegeSlug}/signup` },
     { label: 'Reward', path: `/${collegeSlug}/reward` },
     { label: 'Success', path: `/${collegeSlug}/success` },
-    { label: 'Insider', path: `/${collegeSlug}/campus-insider` },
   ];
 
   const currentIdx = steps.findIndex(s => s.path === pathname);

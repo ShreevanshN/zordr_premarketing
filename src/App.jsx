@@ -1,7 +1,4 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { initSeedData } from './data/seed';
-import ProtectedRoute from './routes/ProtectedRoute';
 import { CollegeProvider } from './context/CollegeContext';
 import CollegeGate from './components/shared/CollegeGate';
 
@@ -9,10 +6,6 @@ import EarlyAccessLanding from './pages/early-access/EarlyAccessLanding';
 import EarlyAccessSignup from './pages/early-access/EarlyAccessSignup';
 import RewardCards from './pages/early-access/RewardCards';
 import EarlyAccessSuccess from './pages/early-access/EarlyAccessSuccess';
-import CampusInsider from './pages/early-access/CampusInsider';
-import Login from './pages/Login';
-import Departments from './pages/Departments';
-import Employees from './pages/Employees';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
@@ -27,12 +20,6 @@ const CollegeScope = ({ children }) => (
 );
 
 function App() {
-  useEffect(() => {
-    // Legacy localStorage seed for the Employee Portal (Insider login),
-    // which is being finished in a later phase. Not used by the
-    // college-scoped pre-launch funnel anymore -- that reads from Supabase.
-    initSeedData();
-  }, []);
 
   return (
     <Routes>
@@ -43,12 +30,6 @@ function App() {
       <Route path="/:collegeSlug/signup" element={<CollegeScope><EarlyAccessSignup /></CollegeScope>} />
       <Route path="/:collegeSlug/reward" element={<CollegeScope><RewardCards /></CollegeScope>} />
       <Route path="/:collegeSlug/success" element={<CollegeScope><EarlyAccessSuccess /></CollegeScope>} />
-      <Route path="/:collegeSlug/campus-insider" element={<CollegeScope><CampusInsider /></CollegeScope>} />
-
-      {/* Employee / Insider Portal -- college-agnostic, finished in a later phase */}
-      <Route path="/employee/login" element={<Login />} />
-      <Route path="/departments" element={<ProtectedRoute><Departments /></ProtectedRoute>} />
-      <Route path="/employees" element={<ProtectedRoute><Employees /></ProtectedRoute>} />
 
       {/* Admin console -- real Supabase Auth, separate from the Employee Portal above */}
       <Route path="/admin/login" element={<AdminAuthProvider><AdminLogin /></AdminAuthProvider>} />

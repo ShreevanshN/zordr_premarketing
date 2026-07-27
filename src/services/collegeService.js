@@ -46,21 +46,4 @@ export async function getCollegeBySlug(slug) {
   };
 }
 
-/**
- * Loads the dynamic Campus Insider form fields configured for a college.
- * Public-readable per RLS, same reasoning as above.
- */
-export async function getDynamicFormFields(collegeId) {
-  if (!collegeId) return [];
-  const { data, error } = await supabase
-    .from('dynamic_form_fields')
-    .select('*')
-    .eq('college_id', collegeId)
-    .order('display_order', { ascending: true });
 
-  if (error) {
-    console.error('[collegeService] failed to load dynamic form fields', error);
-    return [];
-  }
-  return data ?? [];
-}

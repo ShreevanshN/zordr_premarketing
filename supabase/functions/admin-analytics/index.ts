@@ -73,14 +73,6 @@ Deno.serve(async (req) => {
       .eq('college_id', collegeId)
       .eq('status', 'confirmed');
 
-    // Insider applications by status
-    const { data: applications } = await supabase
-      .from('insider_applications')
-      .select('status')
-      .eq('college_id', collegeId);
-    const applicationsByStatus = { pending: 0, accepted: 0, rejected: 0 };
-    (applications || []).forEach(a => { applicationsByStatus[a.status] = (applicationsByStatus[a.status] || 0) + 1; });
-
     return jsonResponse({
       college: {
         name: college.name,
@@ -92,7 +84,6 @@ Deno.serve(async (req) => {
       signupTrend,
       rewardDistribution,
       totalReferrals: totalReferrals ?? 0,
-      applicationsByStatus,
       couponLedger: (coupons || []).slice(0, 100).map(c => ({
         code: c.coupon_code,
         rewardTitle: c.rewards?.title,

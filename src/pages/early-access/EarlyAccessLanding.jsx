@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useCollege } from '../../context/CollegeContext';
 import EarlyAccessLayout from '../../components/shared/EarlyAccessLayout';
+import heroImage from '../../assets/campus-students-hero.png';
 
 const benefits = [
   { icon: '🎁', label: 'Launch week rewards' },
@@ -16,7 +17,7 @@ const EarlyAccessLanding = () => {
   const primary = college?.theme?.primary || '#FF5A1F';
   const claimed = college?.current_signup_count ?? 0;
   const total = college?.early_bird_limit ?? 500;
-  const pct = total > 0 ? Math.round((claimed / total) * 100) : 0;
+  const pct = total > 0 ? Math.min(Math.round((claimed / total) * 100), 100) : 0;
   const remaining = Math.max(total - claimed, 0);
 
   return (
@@ -32,27 +33,58 @@ const EarlyAccessLanding = () => {
         Zordr is coming to<br />
         <span style={{ color: primary }}>{college?.short_name || college?.name}</span>
       </h1>
-      <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 24 }}>Skip queues. Order smarter. Save time.</p>
+      <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 20 }}>Skip queues. Order smarter. Save time.</p>
 
-      {/* Early Bird CTA */}
-      <div style={{ background: '#FFF6F2', borderRadius: 16, padding: '16px', marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-          <span style={{ fontSize: 18 }}>🐦</span>
-          <span style={{ fontWeight: 700, color: primary, fontSize: 15 }}>Become an Early Bird.</span>
+      {/* Image with Progress and Header Overlays */}
+      <div style={{ position: 'relative', width: '100%', borderRadius: 20, overflow: 'hidden', marginBottom: 24, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+        <img src={heroImage} alt="Campus students" style={{ width: '100%', display: 'block' }} />
+        
+        {/* Top Overlay: Become an Early Bird text */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          background: 'rgba(15, 23, 42, 0.8)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          padding: '12px 20px',
+          color: '#fff',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 14 }}>🐦</span>
+            <span style={{ fontWeight: 800, color: primary, fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Become an Early Bird</span>
+          </div>
+          <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>Be among the first {total} students to join before launch.</div>
         </div>
-        <p style={{ fontSize: 13, color: '#6B7280' }}>Be among the first {total} students to join before launch.</p>
-      </div>
 
-      {/* Progress */}
-      <div style={{ background: '#fff', border: '1px solid #EAEAEA', borderRadius: 16, padding: '20px', marginBottom: 24 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: '#6B7280', letterSpacing: '0.08em', marginBottom: 8 }}>🔥 EARLY BIRDS CLAIMED</div>
-        <div style={{ fontSize: 'clamp(32px, 10vw, 40px)', fontWeight: 800, color: primary, lineHeight: 1 }}>
-          {claimed} <span style={{ fontSize: 'clamp(18px, 6vw, 24px)', color: '#111827' }}>/ {total}</span>
+        {/* Bottom Overlay: Progress panel */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: 'rgba(15, 23, 42, 0.82)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          padding: '16px 20px',
+          color: '#fff',
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: primary, letterSpacing: '0.08em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>🔥</span> EARLY BIRDS CLAIMED
+          </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+            <span style={{ fontSize: 32, fontWeight: 900, color: primary }}>{claimed}</span>
+            <span style={{ fontSize: 18, opacity: 0.8 }}>/ {total}</span>
+          </div>
+          <div style={{ margin: '8px 0 4px', height: 4, background: 'rgba(255,255,255,0.2)', borderRadius: 10 }}>
+            <div style={{ height: '100%', width: `${pct}%`, background: primary, borderRadius: 10 }} />
+          </div>
+          <span style={{ fontSize: 11, color: primary, fontWeight: 600 }}>{remaining} spots remaining</span>
         </div>
-        <div style={{ margin: '12px 0 6px', height: 6, background: '#EAEAEA', borderRadius: 10 }}>
-          <div style={{ height: '100%', width: `${pct}%`, background: primary, borderRadius: 10 }} />
-        </div>
-        <p style={{ fontSize: 13, color: primary, fontWeight: 500 }}>{remaining} spots remaining</p>
       </div>
 
       {/* Benefits — 2x2 on mobile, 4-col on wider screens */}
@@ -76,12 +108,7 @@ const EarlyAccessLanding = () => {
         🐦 Become an Early Bird →
       </button>
 
-      <button
-        onClick={() => navigate(`/${slug}/campus-insider`)}
-        style={{ width: '100%', background: '#fff', color: '#111827', border: '1px solid #EAEAEA', borderRadius: 14, padding: '16px', fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap', textAlign: 'center' }}
-      >
-        👥 Want to do more? <strong>Become a Campus Insider</strong> →
-      </button>
+
 
       <p style={{ textAlign: 'center', fontSize: 12, color: '#9CA3AF', marginTop: 20 }}>🔒 100% safe. We respect your privacy.</p>
     </EarlyAccessLayout>

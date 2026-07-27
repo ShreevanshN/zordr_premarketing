@@ -63,7 +63,6 @@ const AdminOverviewTab = ({ college }) => {
         <StatCard label="Total Signups" value={stats.totalSignups} />
         <StatCard label="Rewards Claimed" value={stats.totalRewardsClaimed} />
         <StatCard label="Confirmed Referrals" value={stats.totalReferrals} />
-        <StatCard label="Insider Applications" value={stats.applicationsByStatus.pending + stats.applicationsByStatus.accepted + stats.applicationsByStatus.rejected} />
       </div>
 
       {/* Signup trend */}
@@ -92,17 +91,6 @@ const AdminOverviewTab = ({ college }) => {
             <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: i < stats.rewardDistribution.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
               <span style={{ fontSize: 13 }}>{r.title}</span>
               <span style={{ fontSize: 13, fontWeight: 700 }}>{r.count}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Applications by status */}
-        <div style={card}>
-          <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 12 }}>Insider applications</p>
-          {['pending', 'accepted', 'rejected'].map((s, i) => (
-            <div key={s} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: i < 2 ? '1px solid #F3F4F6' : 'none' }}>
-              <span style={{ fontSize: 13, textTransform: 'capitalize' }}>{s}</span>
-              <span style={{ fontSize: 13, fontWeight: 700 }}>{stats.applicationsByStatus[s] || 0}</span>
             </div>
           ))}
         </div>

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
+import logoImg from '../../assets/zordr-logo.png';
+
 const AdminLogin = () => {
   const { login } = useAdminAuth();
   const navigate = useNavigate();
@@ -32,8 +34,9 @@ const AdminLogin = () => {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAFAFA', fontFamily: 'Inter, sans-serif' }}>
       <form onSubmit={handleSubmit} style={{ width: 340, background: '#fff', border: '1px solid #EAEAEA', borderRadius: 20, padding: 32 }}>
-        <div style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>
-          <span style={{ color: '#FF5A1F' }}>Z</span>ordr Admin
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+          <img src={logoImg} alt="zordr" style={{ height: 26 }} />
+          <span style={{ fontSize: 18, fontWeight: 800, color: '#4B5563' }}>Admin</span>
         </div>
         <p style={{ fontSize: 13, color: '#6B7280', marginBottom: 24 }}>Campaign configuration console</p>
 

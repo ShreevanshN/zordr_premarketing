@@ -22,17 +22,6 @@ export const adminRewards = {
   update: (collegeId, rewardId, fields) => callAdminFunction('admin-rewards', { action: 'update', collegeId, rewardId, ...fields }),
 };
 
-export const adminFormFields = {
-  list: (collegeId) => callAdminFunction('admin-form-fields', { action: 'list', collegeId }),
-  create: (collegeId, fields) => callAdminFunction('admin-form-fields', { action: 'create', collegeId, ...fields }),
-  update: (collegeId, fieldId, fields) => callAdminFunction('admin-form-fields', { action: 'update', collegeId, fieldId, ...fields }),
-  remove: (fieldId) => callAdminFunction('admin-form-fields', { action: 'delete', fieldId }),
-};
-
-export const adminApplications = {
-  list: (collegeId, status) => callAdminFunction('admin-applications', { action: 'list', collegeId, status }),
-  updateStatus: (applicationId, status) => callAdminFunction('admin-applications', { action: 'updateStatus', applicationId, status }),
-};
 
 export const adminAnalytics = {
   get: (collegeId) => callAdminFunction('admin-analytics', { collegeId }),

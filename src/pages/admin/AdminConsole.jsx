@@ -4,17 +4,13 @@ import { adminColleges } from '../../services/adminService';
 import AdminOverviewTab from '../../components/admin/AdminOverviewTab';
 import AdminCollegesTab from '../../components/admin/AdminCollegesTab';
 import AdminRewardsTab from '../../components/admin/AdminRewardsTab';
-import AdminRolesTab from '../../components/admin/AdminRolesTab';
-import AdminQuestionsTab from '../../components/admin/AdminQuestionsTab';
-import AdminApplicationsTab from '../../components/admin/AdminApplicationsTab';
+
+import logoImg from '../../assets/zordr-logo.png';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: '📊' },
   { id: 'colleges', label: 'Colleges', icon: '🏫' },
   { id: 'rewards', label: 'Rewards', icon: '🎁' },
-  { id: 'roles', label: 'Ambassador Roles', icon: '🏷️' },
-  { id: 'questions', label: 'Insider Questions', icon: '📝' },
-  { id: 'applications', label: 'Applications', icon: '🚀' },
 ];
 
 const AdminConsole = () => {
@@ -49,8 +45,9 @@ const AdminConsole = () => {
     <div style={{ display: 'flex', minHeight: '100vh', background: '#FAFAFA', fontFamily: 'Inter, sans-serif' }}>
       {/* Sidebar */}
       <aside style={{ width: 240, flexShrink: 0, borderRight: '1px solid #EAEAEA', background: '#fff', padding: '24px 16px', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ fontSize: 20, fontWeight: 800, marginBottom: 24 }}>
-          <span style={{ color: '#FF5A1F' }}>Z</span>ordr Admin
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 24 }}>
+          <img src={logoImg} alt="zordr" style={{ height: 22 }} />
+          <span style={{ fontSize: 15, fontWeight: 800, color: '#4B5563' }}>Admin</span>
         </div>
 
         {/* College selector */}
@@ -102,9 +99,6 @@ const AdminConsole = () => {
 
         {tab === 'overview' && selectedCollege && <AdminOverviewTab college={selectedCollege} />}
         {tab === 'rewards' && selectedCollege && <AdminRewardsTab college={selectedCollege} />}
-        {tab === 'roles' && selectedCollege && <AdminRolesTab college={selectedCollege} />}
-        {tab === 'questions' && selectedCollege && <AdminQuestionsTab college={selectedCollege} />}
-        {tab === 'applications' && selectedCollege && <AdminApplicationsTab college={selectedCollege} />}
       </main>
     </div>
   );
