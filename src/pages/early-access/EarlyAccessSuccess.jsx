@@ -127,22 +127,32 @@ const EarlyAccessSuccess = () => {
       {stats?.milestones?.length > 0 && (
         <div style={{ background: '#fff', border: '1px solid #EAEAEA', borderRadius: 16, padding: '16px', marginBottom: 16 }}>
           <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>🎯 Referral Rewards</h3>
-          {stats.milestones.map((m, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: i < stats.milestones.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{
-                  width: 22, height: 22, borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: m.achieved ? primary : '#F3F4F6', color: m.achieved ? '#fff' : '#9CA3AF', fontSize: 11, fontWeight: 700,
-                }}>
-                  {m.achieved ? '✓' : m.referralCount}
-                </span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: m.achieved ? '#111827' : '#9CA3AF' }}>{m.referralCount} referral{m.referralCount > 1 ? 's' : ''} — {m.rewardTitle}</div>
-                  {m.achieved && m.couponCode && <div style={{ fontSize: 11, color: primary, fontWeight: 600 }}>{m.couponCode}</div>}
+          {stats.milestones.map((m, i) => {
+            const prevCount = i === 0 ? 0 : stats.milestones[i - 1].referralCount;
+            const diff = m.referralCount - prevCount;
+            const labelText = i === 0
+              ? `${m.referralCount} referrals — ${m.rewardTitle}`
+              : `+${diff} additional referrals (${m.referralCount} total) — ${m.rewardTitle}`;
+            
+            return (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: i < stats.milestones.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{
+                    width: 22, height: 22, borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: m.achieved ? primary : '#F3F4F6', color: m.achieved ? '#fff' : '#9CA3AF', fontSize: 11, fontWeight: 700,
+                  }}>
+                    {m.achieved ? '✓' : m.referralCount}
+                  </span>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: m.achieved ? '#111827' : '#9CA3AF' }}>
+                      {labelText}
+                    </div>
+                    {m.achieved && m.couponCode && <div style={{ fontSize: 11, color: primary, fontWeight: 600 }}>{m.couponCode}</div>}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

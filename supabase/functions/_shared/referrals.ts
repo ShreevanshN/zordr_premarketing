@@ -79,6 +79,38 @@ export async function applyReferral(supabase, { collegeId, referrerCode, referre
     return { referrerId: referrer.id, referralCount, milestoneHit: null };
   }
 
+  // 1. Only allow "5% OFF" and "10% OFF" rewards to get coupons.
+  const rewardTitle = milestone.rewards.title;
+  const isAllowedReward = rewardTitle === '5% OFF' || rewardTitle === '10% OFF';
+  if (!isAllowedReward) {
+    console.log(`[applyReferral] Milestone reached for "${rewardTitle}", but only "5% OFF" and "10% OFF" rewards are allowed. Skipping coupon generation.`);
+    return { referrerId: referrer.id, referralCount, milestoneHit: null };
+  }
+
+  // 2. Check total budget spent on referral milestone coupons so far for this college.
+  // Milestone rewards have active = false.
+  const { data: couponsList, error: spentError } = await supabase
+    .from('coupons')
+    .select('rewards!inner(max_discount_amount, active)')
+    .eq('college_id', collegeId)
+    .eq('rewards.active', false);
+
+  let totalSpent = 0;
+  if (spentError) {
+    console.error('[applyReferral] failed to calculate spent budget', spentError);
+  } else if (couponsList) {
+    for (const c of couponsList) {
+      totalSpent += Number(c.rewards?.max_discount_amount || 0);
+    }
+  }
+
+  // 3. Enforce the budget cap (₹3,000)
+  const nextCouponValue = Number(milestone.rewards.max_discount_amount || 0);
+  if (totalSpent >= 3000 || totalSpent + nextCouponValue > 3000) {
+    console.log(`[applyReferral] Budget cap of ₹3000 reached or would be exceeded (spent: ₹${totalSpent}, next: ₹${nextCouponValue}). Skipping coupon generation.`);
+    return { referrerId: referrer.id, referralCount, milestoneHit: null };
+  }
+
   const { data: college } = await supabase
     .from('colleges')
     .select('short_name')
