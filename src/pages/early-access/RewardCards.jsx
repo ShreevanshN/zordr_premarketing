@@ -4,6 +4,7 @@ import EarlyAccessLayout from '../../components/shared/EarlyAccessLayout';
 import { useCollege } from '../../context/CollegeContext';
 import { claimReward } from '../../services/studentService';
 import { handleDownloadNow } from '../../utils/device';
+import { FaGooglePlay, FaApple } from 'react-icons/fa';
 
 const CARD_COUNT = 6;
 
@@ -500,7 +501,10 @@ const RewardCards = () => {
               boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
             }}
           >
-            <span style={{ fontSize: 18 }}>📲</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: 0.9 }}>
+              <FaGooglePlay size={18} />
+              <FaApple size={18} />
+            </div>
             <span>Download Now</span>
           </button>
 
