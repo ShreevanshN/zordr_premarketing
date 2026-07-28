@@ -4,6 +4,7 @@ import EarlyAccessLayout from '../../components/shared/EarlyAccessLayout';
 import { useCollege } from '../../context/CollegeContext';
 import { getStudentSession } from '../../services/studentService';
 import { getReferralStats } from '../../services/referralService';
+import { FaWhatsapp } from 'react-icons/fa';
 
 const EarlyAccessSuccess = () => {
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ const EarlyAccessSuccess = () => {
             🔗 Copy Link
           </button>
           <button onClick={whatsappShare} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 8px', border: '1px solid #EAEAEA', borderRadius: 12, background: '#fff', cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#22C55E' }}>
-            📱 WhatsApp
+            <FaWhatsapp size={18} /> WhatsApp
           </button>
         </div>
       </div>

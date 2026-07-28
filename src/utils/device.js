@@ -30,7 +30,7 @@ export function handleDownloadNow(links = {}) {
   const platform = detectDevicePlatform();
 
   const iosUrl = links.ios || 'https://apps.apple.com/app/zordr/id000000000';
-  const androidUrl = links.android || 'https://play.google.com/store/apps/details?id=in.zordr.app';
+  const androidUrl = links.android || 'https://play.google.com/store/apps/details?id=com.zordr.app&hl=en_IN';
 
   if (platform === 'ios') {
     window.open(iosUrl, '_blank', 'noopener,noreferrer');
