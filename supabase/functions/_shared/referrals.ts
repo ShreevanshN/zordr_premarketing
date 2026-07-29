@@ -39,10 +39,10 @@ async function notifyReferrer(supabase, referrerId, milestoneReward, couponCode)
   }
 
   const template = Deno.env.get('RICHAUTOMATE_REFERRAL_TEMPLATE') || 'zordr_referral_milestone';
-  const language = Deno.env.get('RICHAUTOMATE_LANGUAGE') || 'en_us';
+  const language = Deno.env.get('RICHAUTOMATE_LANGUAGE') || 'en_US';
 
   try {
-    const res = await fetch('https://api.richautomate.in/api/v1/send-template', {
+    const res = await fetch('https://richautomate.in/api/v1/send-template', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
