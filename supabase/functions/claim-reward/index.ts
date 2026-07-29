@@ -37,12 +37,60 @@ function pickWeightedReward(rewards) {
   return rewards[rewards.length - 1]; // floating point fallback
 }
 
-// TODO(Phase 2.5): swap this for a real WhatsApp Business Cloud API call
-// once the business number is connected. Keeping it isolated here means
-// nothing else in this function needs to change when that happens.
-async function sendReward(_student, _reward, _couponCode) {
-  console.log(`[sendReward] WhatsApp not yet connected — skipping send for student ${_student.id}`);
-  return { sent: false, reason: 'whatsapp_not_configured' };
+async function sendReward(student, reward, couponCode) {
+  const apiKey = Deno.env.get('RICHAUTOMATE_API_KEY');
+  if (!apiKey) {
+    console.log(`[sendReward] RICHAUTOMATE_API_KEY is not set — skipping send for student ${student.id}`);
+    return { sent: false, reason: 'whatsapp_not_configured' };
+  }
+
+  if (!student.phone) {
+    console.log(`[sendReward] Student ${student.id} has no phone number — skipping send`);
+    return { sent: false, reason: 'phone_missing' };
+  }
+
+  let phone = student.phone.replace(/[^0-9]/g, '');
+  if (phone.length === 10) {
+    phone = '91' + phone;
+  }
+
+  const template = Deno.env.get('RICHAUTOMATE_REWARD_TEMPLATE') || 'zordr_reward_claimed';
+  const language = Deno.env.get('RICHAUTOMATE_LANGUAGE') || 'en_us';
+
+  try {
+    const res = await fetch('https://api.richautomate.in/api/v1/send-template', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        phone,
+        template,
+        language,
+        variables: [student.name || 'Student', reward.title, couponCode],
+      }),
+    });
+
+    const bodyText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(bodyText);
+    } catch {
+      data = bodyText;
+    }
+
+    if (!res.ok) {
+      console.error(`[sendReward] RichAutomate returned error:`, data);
+      return { sent: false, error: data };
+    }
+
+    console.log(`[sendReward] WhatsApp sent successfully to student ${student.id}`, data);
+    return { sent: true, data };
+  } catch (err) {
+    console.error(`[sendReward] Failed to call RichAutomate:`, err);
+    return { sent: false, error: err instanceof Error ? err.message : String(err) };
+  }
 }
 
 function couponPayload(reward, couponCode) {
@@ -71,7 +119,7 @@ Deno.serve(async (req) => {
 
     const { data: student, error: studentError } = await supabase
       .from('students')
-      .select('id, college_id, reward_id, coupon_id')
+      .select('id, college_id, reward_id, coupon_id, name, phone')
       .eq('id', studentId)
       .maybeSingle();
 

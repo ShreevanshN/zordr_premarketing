@@ -10,11 +10,71 @@
 // fact, without needing to touch this logic twice.
 import { randomCode } from './codegen.ts';
 
-// TODO(Phase 2.5, same as sendReward in claim-reward): swap for a real
-// WhatsApp Business Cloud API call once a provider is connected.
-async function notifyReferrer(referrerId, milestoneReward, couponCode) {
-  console.log(`[notifyReferrer] WhatsApp not yet connected -- skipping notify for referrer ${referrerId}, unlocked "${milestoneReward.title}" (${couponCode})`);
-  return { sent: false, reason: 'whatsapp_not_configured' };
+async function notifyReferrer(supabase, referrerId, milestoneReward, couponCode) {
+  const apiKey = Deno.env.get('RICHAUTOMATE_API_KEY');
+  if (!apiKey) {
+    console.log(`[notifyReferrer] RICHAUTOMATE_API_KEY is not set -- skipping notify for referrer ${referrerId}`);
+    return { sent: false, reason: 'whatsapp_not_configured' };
+  }
+
+  const { data: student, error } = await supabase
+    .from('students')
+    .select('name, phone')
+    .eq('id', referrerId)
+    .maybeSingle();
+
+  if (error || !student) {
+    console.error(`[notifyReferrer] Could not fetch student details for referrer ${referrerId}:`, error);
+    return { sent: false, reason: 'student_fetch_failed' };
+  }
+
+  if (!student.phone) {
+    console.log(`[notifyReferrer] Referrer ${referrerId} has no phone number -- skipping notify`);
+    return { sent: false, reason: 'phone_missing' };
+  }
+
+  let phone = student.phone.replace(/[^0-9]/g, '');
+  if (phone.length === 10) {
+    phone = '91' + phone;
+  }
+
+  const template = Deno.env.get('RICHAUTOMATE_REFERRAL_TEMPLATE') || 'zordr_referral_milestone';
+  const language = Deno.env.get('RICHAUTOMATE_LANGUAGE') || 'en_us';
+
+  try {
+    const res = await fetch('https://api.richautomate.in/api/v1/send-template', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        phone,
+        template,
+        language,
+        variables: [student.name || 'Referrer', milestoneReward.title, couponCode],
+      }),
+    });
+
+    const bodyText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(bodyText);
+    } catch {
+      data = bodyText;
+    }
+
+    if (!res.ok) {
+      console.error(`[notifyReferrer] RichAutomate returned error:`, data);
+      return { sent: false, error: data };
+    }
+
+    console.log(`[notifyReferrer] WhatsApp sent successfully to referrer ${referrerId}`, data);
+    return { sent: true, data };
+  } catch (err) {
+    console.error(`[notifyReferrer] Failed to call RichAutomate:`, err);
+    return { sent: false, error: err instanceof Error ? err.message : String(err) };
+  }
 }
 
 /**
@@ -146,7 +206,7 @@ export async function applyReferral(supabase, { collegeId, referrerCode, referre
     return { referrerId: referrer.id, referralCount, milestoneHit: null };
   }
 
-  await notifyReferrer(referrer.id, milestone.rewards, coupon.coupon_code);
+  await notifyReferrer(supabase, referrer.id, milestone.rewards, coupon.coupon_code);
 
   return {
     referrerId: referrer.id,
