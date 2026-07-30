@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import EarlyAccessLayout from '../../components/shared/EarlyAccessLayout';
 import { useCollege } from '../../context/CollegeContext';
 import { createStudent } from '../../services/studentService';
+import { detectDevicePlatform } from '../../utils/device';
 
 const Field = ({ icon, placeholder, type = 'text', value, onChange }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 12, border: '1px solid #EAEAEA', borderRadius: 12, padding: '14px 16px', background: '#fff', marginBottom: 12 }}>
@@ -34,7 +35,8 @@ const EarlyAccessSignup = () => {
     setSubmitting(true);
 
     const ref = searchParams.get('ref') || undefined;
-    const { data, error: submitError } = await createStudent(slug, { ...form, ref });
+    const deviceType = detectDevicePlatform();
+    const { data, error: submitError } = await createStudent(slug, { ...form, ref, deviceType });
 
     setSubmitting(false);
 

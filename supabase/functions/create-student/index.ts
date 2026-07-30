@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { collegeSlug, name, email, phone, ref } = await req.json();
+    const { collegeSlug, name, email, phone, ref, deviceType } = await req.json();
 
     if (!collegeSlug || !name || !email || !phone) {
       return jsonResponse({ error: 'collegeSlug, name, email, and phone are required' }, 400);
@@ -102,6 +102,7 @@ Deno.serve(async (req) => {
           phone: cleanPhone,
           referral_code: candidate,
           referred_by: referredBy,
+          device_type: deviceType || null,
         })
         .select('id, referral_code')
         .single();

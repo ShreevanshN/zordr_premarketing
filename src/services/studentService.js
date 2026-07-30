@@ -34,9 +34,9 @@ function setStudentSession(slug, data) {
  * Creates (or resumes) an Early Bird signup for the given college.
  * @returns {Promise<{ data: object|null, error: string|null }>}
  */
-export async function createStudent(slug, { name, email, phone, ref }) {
+export async function createStudent(slug, { name, email, phone, ref, deviceType }) {
   const { data, error } = await supabase.functions.invoke('create-student', {
-    body: { collegeSlug: slug, name, email, phone, ref },
+    body: { collegeSlug: slug, name, email, phone, ref, deviceType },
   });
 
   if (error) return { data: null, error: error.message || 'Could not sign up right now' };

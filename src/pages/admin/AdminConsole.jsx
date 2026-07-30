@@ -4,11 +4,13 @@ import { adminColleges } from '../../services/adminService';
 import AdminOverviewTab from '../../components/admin/AdminOverviewTab';
 import AdminCollegesTab from '../../components/admin/AdminCollegesTab';
 import AdminRewardsTab from '../../components/admin/AdminRewardsTab';
+import AdminEarlyBirdsTab from '../../components/admin/AdminEarlyBirdsTab';
 
 import logoImg from '../../assets/zordr-logo.png';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: '📊' },
+  { id: 'early_birds', label: 'Early Birds', icon: '🐦' },
   { id: 'colleges', label: 'Colleges', icon: '🏫' },
   { id: 'rewards', label: 'Rewards', icon: '🎁' },
 ];
@@ -99,6 +101,7 @@ const AdminConsole = () => {
 
         {tab === 'overview' && selectedCollege && <AdminOverviewTab college={selectedCollege} />}
         {tab === 'rewards' && selectedCollege && <AdminRewardsTab college={selectedCollege} />}
+        {tab === 'early_birds' && <AdminEarlyBirdsTab colleges={colleges} />}
       </main>
     </div>
   );

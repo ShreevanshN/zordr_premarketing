@@ -31,3 +31,7 @@ export const adminCoupons = {
   markSynced: (collegeId, couponCode) =>
     callAdminFunction('admin-coupons', { action: 'markSynced', collegeId, couponCode }),
 };
+
+export const adminEarlyBirds = {
+  list: (collegeId) => callAdminFunction('admin-early-birds', { collegeId }),
+};
