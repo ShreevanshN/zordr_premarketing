@@ -12,9 +12,10 @@ const IOSLaunchStatus = () => {
   const session = getStudentSession(slug);
   const [copied, setCopied] = useState(false);
 
-  const couponCode = session?.couponCode || 'RESERVED';
-  const rewardTitle = session?.rewardTitle || 'Mystery Reward';
-  const rewardDescription = session?.rewardDescription || 'Exclusive launch perk';
+  const hasCoupon = !!session?.couponCode;
+  const couponCode = session?.couponCode || 'COMING SOON';
+  const rewardTitle = hasCoupon ? session.rewardTitle : 'Zordr iOS App';
+  const rewardDescription = hasCoupon ? session.rewardDescription : 'Download the app on launch day to get started!';
 
   const copyCode = () => {
     if (session?.couponCode) {
@@ -60,7 +61,9 @@ const IOSLaunchStatus = () => {
         boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
       }}>
         <p style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.6, textAlign: 'center', marginBottom: 20 }}>
-          Our application is currently undergoing review by the Apple App Store team. We'll be live in just a few days!
+          {hasCoupon
+            ? "Our application is currently undergoing review by the Apple App Store team. We'll be live in just a few days!"
+            : "We are currently completing the final reviews with the Apple App Store team. Zordr will be live for iOS very soon!"}
         </p>
 
         <div style={{
@@ -75,7 +78,7 @@ const IOSLaunchStatus = () => {
           marginBottom: 16,
         }}>
           <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', opacity: 0.9, textTransform: 'uppercase', marginBottom: 6 }}>
-            🎁 Your Reward is Locked & Ready
+            {hasCoupon ? '🎁 Your Reward is Locked & Ready' : '📲 Zordr App Launch'}
           </p>
           <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 2, textShadow: '0 1px 4px rgba(0,0,0,0.1)' }}>
             {rewardTitle}
@@ -100,17 +103,21 @@ const IOSLaunchStatus = () => {
               width: '100%',
               maxWidth: 220,
               boxSizing: 'border-box',
+              pointerEvents: hasCoupon ? 'auto' : 'none',
+              opacity: hasCoupon ? 1 : 0.8,
             }}
           >
             <span style={{ fontSize: 16, fontWeight: 800, letterSpacing: '0.05em' }}>{couponCode}</span>
-            {copied ? <FaCheck size={13} color="#22C55E" /> : <FaRegCopy size={13} />}
+            {hasCoupon && (copied ? <FaCheck size={13} color="#22C55E" /> : <FaRegCopy size={13} />)}
           </div>
         </div>
 
         <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', background: '#F9FAFB', borderRadius: 12, padding: 12 }}>
           <span style={{ fontSize: 18 }}>🔔</span>
           <p style={{ fontSize: 12.5, color: '#6B7280', lineHeight: 1.5, margin: 0 }}>
-            Don't worry—you won't lose this! We will send you a WhatsApp notification the moment the iOS app goes live so you can log in and claim your coupon.
+            {hasCoupon
+              ? "Don't worry—you won't lose this! We will send you a WhatsApp notification the moment the iOS app goes live so you can log in and claim your coupon."
+              : "Keep an eye out! We will announce the live launch on campus. Get ready to experience smarter, faster campus ordering."}
           </p>
         </div>
       </div>

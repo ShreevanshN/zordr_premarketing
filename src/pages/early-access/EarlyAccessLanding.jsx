@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCollege } from '../../context/CollegeContext';
 import EarlyAccessLayout from '../../components/shared/EarlyAccessLayout';
 import heroImage from '../../assets/campus-students-hero.png';
+import { handleDownloadNow, detectDevicePlatform } from '../../utils/device';
 
 const benefits = [
   { icon: '🎁', label: 'Launch week rewards' },
@@ -54,9 +55,15 @@ const EarlyAccessLanding = () => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ fontSize: 14 }}>🐦</span>
-            <span style={{ fontWeight: 800, color: primary, fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Become an Early Bird</span>
+            <span style={{ fontWeight: 800, color: primary, fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              {remaining <= 0 ? 'Campaign Closed' : 'Become an Early Bird'}
+            </span>
           </div>
-          <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>Be among the first {total} students to join before launch.</div>
+          <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>
+            {remaining <= 0
+              ? 'Our Early Bird campaign is now closed. Download the app below to join!'
+              : `Be among the first ${total} students to join before launch.`}
+          </div>
         </div>
 
         {/* Bottom Overlay: Progress panel */}
@@ -102,10 +109,20 @@ const EarlyAccessLanding = () => {
 
       {/* Buttons */}
       <button
-        onClick={() => navigate(`/${slug}/signup`)}
+        onClick={() => {
+          if (remaining <= 0) {
+            if (detectDevicePlatform() === 'ios') {
+              navigate(`/${slug}/ios-launch`);
+            } else {
+              handleDownloadNow(college?.app_links);
+            }
+          } else {
+            navigate(`/${slug}/signup`);
+          }
+        }}
         style={{ width: '100%', background: primary, color: '#fff', border: 'none', borderRadius: 14, padding: '16px', fontSize: 16, fontWeight: 700, cursor: 'pointer', marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
       >
-        🐦 Become an Early Bird →
+        {remaining <= 0 ? '📲 Download Zordr App Now' : '🐦 Become an Early Bird →'}
       </button>
 
 

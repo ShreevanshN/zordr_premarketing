@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import EarlyAccessLayout from '../../components/shared/EarlyAccessLayout';
 import { useCollege } from '../../context/CollegeContext';
@@ -20,9 +20,18 @@ const Field = ({ icon, placeholder, type = 'text', value, onChange }) => (
 
 const EarlyAccessSignup = () => {
   const navigate = useNavigate();
-  const { slug } = useCollege();
+  const { college, slug } = useCollege();
   const [searchParams] = useSearchParams();
   const [form, setForm] = useState({ name: '', email: '', phone: '' });
+
+  const claimed = college?.current_signup_count ?? 0;
+  const total = college?.early_bird_limit ?? 500;
+
+  useEffect(() => {
+    if (college && claimed >= total) {
+      navigate(`/${slug}`);
+    }
+  }, [college, claimed, total, navigate, slug]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
