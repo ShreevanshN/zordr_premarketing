@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import EarlyAccessLayout from '../../components/shared/EarlyAccessLayout';
 import { useCollege } from '../../context/CollegeContext';
 import { claimReward } from '../../services/studentService';
-import { handleDownloadNow } from '../../utils/device';
+import { handleDownloadNow, detectDevicePlatform } from '../../utils/device';
 import { FaGooglePlay, FaApple } from 'react-icons/fa';
 
 const CARD_COUNT = 6;
@@ -74,6 +74,14 @@ const RewardCards = () => {
     navigator.clipboard.writeText(reward.couponCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleContinue = () => {
+    if (detectDevicePlatform() === 'ios') {
+      navigate(`/${slug}/ios-launch`);
+    } else {
+      setPhase('celebrate');
+    }
   };
 
   const cardGrid = (
@@ -419,7 +427,7 @@ const RewardCards = () => {
           </button>
 
           <button
-            onClick={() => setPhase('celebrate')}
+            onClick={handleContinue}
             style={{
               width: '100%',
               background: '#fff',

@@ -34,6 +34,9 @@ async function notifyReferrer(supabase, referrerId, milestoneReward, couponCode)
   }
 
   let phone = student.phone.replace(/[^0-9]/g, '');
+  if (phone.startsWith('0')) {
+    phone = phone.substring(1);
+  }
   if (phone.length === 10) {
     phone = '91' + phone;
   }

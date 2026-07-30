@@ -6,6 +6,7 @@ import EarlyAccessLanding from './pages/early-access/EarlyAccessLanding';
 import EarlyAccessSignup from './pages/early-access/EarlyAccessSignup';
 import RewardCards from './pages/early-access/RewardCards';
 import EarlyAccessSuccess from './pages/early-access/EarlyAccessSuccess';
+import IOSLaunchStatus from './pages/early-access/IOSLaunchStatus';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
@@ -30,6 +31,7 @@ function App() {
       <Route path="/:collegeSlug/signup" element={<CollegeScope><EarlyAccessSignup /></CollegeScope>} />
       <Route path="/:collegeSlug/reward" element={<CollegeScope><RewardCards /></CollegeScope>} />
       <Route path="/:collegeSlug/success" element={<CollegeScope><EarlyAccessSuccess /></CollegeScope>} />
+      <Route path="/:collegeSlug/ios-launch" element={<CollegeScope><IOSLaunchStatus /></CollegeScope>} />
 
       {/* Admin console -- real Supabase Auth, separate from the Employee Portal above */}
       <Route path="/admin/login" element={<AdminAuthProvider><AdminLogin /></AdminAuthProvider>} />
