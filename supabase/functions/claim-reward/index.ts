@@ -160,31 +160,22 @@ Deno.serve(async (req) => {
       .single();
     const prefix = (college?.short_name || 'ZDR').toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-    // Generate a unique coupon code, retrying on the rare collision.
-    let coupon = null;
-    for (let attempt = 0; attempt < 5 && !coupon; attempt++) {
-      const candidateCode = `${prefix}-${randomCode(6)}`;
-      const { data: insertedCoupon, error: couponError } = await supabase
-        .from('coupons')
-        .insert({
-          college_id: student.college_id,
-          coupon_code: candidateCode,
-          reward_id: chosenReward.id,
-          claimed: true,
-          claimed_by: student.id,
-          claimed_at: new Date().toISOString(),
-        })
-        .select('id, coupon_code')
-        .single();
+    // Insert static coupon code ZORDR10
+    const staticCode = 'ZORDR10';
+    const { data: coupon, error: couponError } = await supabase
+      .from('coupons')
+      .insert({
+        college_id: student.college_id,
+        coupon_code: staticCode,
+        reward_id: chosenReward.id,
+        claimed: true,
+        claimed_by: student.id,
+        claimed_at: new Date().toISOString(),
+      })
+      .select('id, coupon_code')
+      .single();
 
-      if (!insertedCoupon && couponError?.code === '23505') continue; // code collision, retry
-      if (couponError) return jsonResponse({ error: couponError.message }, 500);
-      coupon = insertedCoupon;
-    }
-
-    if (!coupon) {
-      return jsonResponse({ error: 'Could not generate a unique coupon code, please try again' }, 500);
-    }
+    if (couponError) return jsonResponse({ error: couponError.message }, 500);
 
     // Atomic "claim only once" guard: only succeeds if reward_id is still
     // null. If another request beat us here (double-click / race), this

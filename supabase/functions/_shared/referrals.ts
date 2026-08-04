@@ -181,31 +181,23 @@ export async function applyReferral(supabase, { collegeId, referrerCode, referre
     .single();
   const prefix = (college?.short_name || 'ZDR').toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-  let coupon = null;
-  for (let attempt = 0; attempt < 5 && !coupon; attempt++) {
-    const candidateCode = `${prefix}-${randomCode(6)}`;
-    const { data: inserted, error: couponError } = await supabase
-      .from('coupons')
-      .insert({
-        college_id: collegeId,
-        coupon_code: candidateCode,
-        reward_id: milestone.reward_id,
-        claimed: true,
-        claimed_by: referrer.id,
-        claimed_at: new Date().toISOString(),
-      })
-      .select('id, coupon_code')
-      .single();
+  // Insert static coupon code ZORDR10
+  const staticCode = 'ZORDR10';
+  const { data: coupon, error: couponError } = await supabase
+    .from('coupons')
+    .insert({
+      college_id: collegeId,
+      coupon_code: staticCode,
+      reward_id: milestone.reward_id,
+      claimed: true,
+      claimed_by: referrer.id,
+      claimed_at: new Date().toISOString(),
+    })
+    .select('id, coupon_code')
+    .single();
 
-    if (!inserted && couponError?.code === '23505') continue;
-    if (couponError) {
-      console.error('[applyReferral] failed to create milestone coupon', couponError);
-      return { referrerId: referrer.id, referralCount, milestoneHit: null };
-    }
-    coupon = inserted;
-  }
-
-  if (!coupon) {
+  if (couponError) {
+    console.error('[applyReferral] failed to create milestone coupon', couponError);
     return { referrerId: referrer.id, referralCount, milestoneHit: null };
   }
 
