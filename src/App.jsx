@@ -7,6 +7,7 @@ import EarlyAccessSignup from './pages/early-access/EarlyAccessSignup';
 import RewardCards from './pages/early-access/RewardCards';
 import EarlyAccessSuccess from './pages/early-access/EarlyAccessSuccess';
 import IOSLaunchStatus from './pages/early-access/IOSLaunchStatus';
+import AppDownloadRedirect from './pages/early-access/AppDownloadRedirect';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
@@ -25,6 +26,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/kitsw" replace />} />
+      <Route path="/download" element={<AppDownloadRedirect />} />
 
       {/* College-scoped pre-launch growth funnel: /:collegeSlug/... */}
       <Route path="/:collegeSlug" element={<CollegeScope><EarlyAccessLanding /></CollegeScope>} />
