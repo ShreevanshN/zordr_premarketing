@@ -77,11 +77,7 @@ const RewardCards = () => {
   };
 
   const handleContinue = () => {
-    if (detectDevicePlatform() === 'ios') {
-      navigate(`/${slug}/ios-launch`);
-    } else {
-      setPhase('celebrate');
-    }
+    setPhase('celebrate');
   };
 
   const cardGrid = (

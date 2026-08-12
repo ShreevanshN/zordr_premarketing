@@ -47,7 +47,7 @@ const IOSLaunchStatus = () => {
           Apple App Store status
         </p>
         <h1 style={{ fontSize: 'clamp(22px, 6vw, 26px)', fontWeight: 800, color: '#111827', lineHeight: 1.25 }}>
-          iOS App Launching Soon!
+          iOS App is Now Live! 🎉
         </h1>
       </div>
 
@@ -61,9 +61,7 @@ const IOSLaunchStatus = () => {
         boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
       }}>
         <p style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.6, textAlign: 'center', marginBottom: 20 }}>
-          {hasCoupon
-            ? "Our application is currently undergoing review by the Apple App Store team. We'll be live in just a few days!"
-            : "We are currently completing the final reviews with the Apple App Store team. Zordr will be live for iOS very soon!"}
+          Our application has been approved by Apple and is now available for download on the App Store!
         </p>
 
         <div style={{
@@ -116,13 +114,37 @@ const IOSLaunchStatus = () => {
           <span style={{ fontSize: 18 }}>🔔</span>
           <p style={{ fontSize: 12.5, color: '#6B7280', lineHeight: 1.5, margin: 0 }}>
             {hasCoupon
-              ? "Don't worry—you won't lose this! We will send you a WhatsApp notification the moment the iOS app goes live so you can log in and claim your coupon."
-              : "Keep an eye out! We will announce the live launch on campus. Get ready to experience smarter, faster campus ordering."}
+              ? "Your early bird coupon is ready! Tap the button below to download the app and log in with your registered phone number to claim it."
+              : "Download Zordr today and experience smarter, faster campus ordering!"}
           </p>
         </div>
       </div>
 
       {/* Action buttons */}
+      <button
+        onClick={() => window.open('https://apps.apple.com/in/app/zordr-campus-food-ordering/id6775477121', '_blank', 'noopener,noreferrer')}
+        style={{
+          width: '100%',
+          background: '#111827',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 14,
+          padding: '16px',
+          fontSize: 16,
+          fontWeight: 700,
+          cursor: 'pointer',
+          marginBottom: 12,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          boxShadow: `0 4px 16px rgba(0, 0, 0, 0.15)`,
+        }}
+      >
+        <FaApple size={18} />
+        <span>Download on the App Store</span>
+      </button>
+
       <button
         onClick={() => navigate(`/${slug}/success`)}
         style={{

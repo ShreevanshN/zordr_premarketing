@@ -111,11 +111,7 @@ const EarlyAccessLanding = () => {
       <button
         onClick={() => {
           if (remaining <= 0) {
-            if (detectDevicePlatform() === 'ios') {
-              navigate(`/${slug}/ios-launch`);
-            } else {
-              handleDownloadNow(college?.app_links);
-            }
+            handleDownloadNow(college?.app_links);
           } else {
             navigate(`/${slug}/signup`);
           }
